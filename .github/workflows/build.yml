@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build whisper.cpp
+        run: |
+          cmake -S whisper.cpp -B whisper.cpp/build -DCMAKE_BUILD_TYPE=Release -DGGML_METAL=ON \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 -DBUILD_SHARED_LIBS=OFF \
+            -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_SERVER=OFF
+          cmake --build whisper.cpp/build --config Release -j"$(sysctl -n hw.ncpu)"
+
+      - name: Build VoxType (Release, ad-hoc signed)
+        run: |
+          xcodebuild -project VoxType.xcodeproj -scheme VoxType -configuration Release \
+            -derivedDataPath build/DerivedData build -quiet
+
+      - name: Check installer scripts
+        run: bash -n setup.sh && bash -n uninstall.sh

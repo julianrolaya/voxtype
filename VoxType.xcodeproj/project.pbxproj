@@ -1,0 +1,508 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0FD0EFA06E579F53CCDC10D2 /* TextPostProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013F0CD7729A7310511CA6D3 /* TextPostProcessor.swift */; };
+		2314EDCCEACFF3513FBA0FA4 /* VoxTypeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E72725DBD71D8D23E7DEB8 /* VoxTypeApp.swift */; };
+		3916BD0A8A0BCA1E50E50503 /* HallucinationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CDA29721620241E7D32EAA /* HallucinationFilter.swift */; };
+		411761E259833D3E62DE39C4 /* GlobalHotKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9330ED0AFE5C86249665FBDD /* GlobalHotKeyManager.swift */; };
+		65D73475A320AD0D769DBFB1 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE85259C4D481928573F21 /* Log.swift */; };
+		7612C45B531F7439179C2128 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99ED6395E653A9333766C1F0 /* Assets.xcassets */; };
+		7DE0CCF607BCF3D0DED5D12D /* PerfLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BE3042185AD9CFB1403282 /* PerfLog.swift */; };
+		8E9B7004EC2155FC85CA83C0 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D56A3D8E7433EA73AB1FC /* HistoryView.swift */; };
+		8F5B0806EF16A831C933FBE6 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2634667F263BB71B10BA9528 /* AppSettings.swift */; };
+		94BB4AA7D8D4C8A57F29F64D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E7A524058E33A50156D5E6 /* AppDelegate.swift */; };
+		A983A60394A13E8C5662F058 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E8DB91EBB124C4BC076307 /* AudioRecorder.swift */; };
+		B2735C3596FB9C9EC950101C /* VoiceCommandManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEDA2C96DB8412ECD7746F0 /* VoiceCommandManager.swift */; };
+		B39E7CAB970BFCD1326159C3 /* OpenAIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0164F83FF61E517C854D3412 /* OpenAIClient.swift */; };
+		BF31431208738CC31E4647E2 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95D8760028FA9E8F20F790E /* KeychainStore.swift */; };
+		C0B07A2C3B9B1C287E0F0D23 /* TranscriptionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1AEC40493457704838510 /* TranscriptionOverlay.swift */; };
+		C53D63074FC6FB8D2E81B345 /* WhisperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C557A0B9C51F946A64004D27 /* WhisperManager.swift */; };
+		C84B9DF91891FD724E9F6C03 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE2DE5D33AC5C1B84CF1957 /* SettingsView.swift */; };
+		D714F54DBBDBA78E777CF791 /* TranscriptionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F7958633711C2EDD737341 /* TranscriptionHistory.swift */; };
+		DB28DC3A85A725D36BD35EDE /* MenuBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C58DC772632EE9BB00F8F1B /* MenuBarManager.swift */; };
+		DEF3C2F3373194A73CD1BD76 /* TextInsertionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E245CF7F0E26DFF662C3452 /* TextInsertionManager.swift */; };
+		F9C909D1009A2172A1468EA5 /* OllamaClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC9F0D23E33D183247D1CB9 /* OllamaClient.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		013F0CD7729A7310511CA6D3 /* TextPostProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPostProcessor.swift; sourceTree = "<group>"; };
+		0164F83FF61E517C854D3412 /* OpenAIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIClient.swift; sourceTree = "<group>"; };
+		10C1F73F50F6814E20419DA4 /* VoxType.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoxType.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2634667F263BB71B10BA9528 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		2E245CF7F0E26DFF662C3452 /* TextInsertionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInsertionManager.swift; sourceTree = "<group>"; };
+		30E7A524058E33A50156D5E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		455E47D126EB8886237441E9 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		52E8DB91EBB124C4BC076307 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		5BEDA2C96DB8412ECD7746F0 /* VoiceCommandManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCommandManager.swift; sourceTree = "<group>"; };
+		60CDA29721620241E7D32EAA /* HallucinationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HallucinationFilter.swift; sourceTree = "<group>"; };
+		81F7958633711C2EDD737341 /* TranscriptionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionHistory.swift; sourceTree = "<group>"; };
+		9330ED0AFE5C86249665FBDD /* GlobalHotKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKeyManager.swift; sourceTree = "<group>"; };
+		99BE3042185AD9CFB1403282 /* PerfLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfLog.swift; sourceTree = "<group>"; };
+		99ED6395E653A9333766C1F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9C58DC772632EE9BB00F8F1B /* MenuBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarManager.swift; sourceTree = "<group>"; };
+		9CC9F0D23E33D183247D1CB9 /* OllamaClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaClient.swift; sourceTree = "<group>"; };
+		A95D8760028FA9E8F20F790E /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		AE4D56A3D8E7433EA73AB1FC /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		C0E72725DBD71D8D23E7DEB8 /* VoxTypeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxTypeApp.swift; sourceTree = "<group>"; };
+		C2D1AEC40493457704838510 /* TranscriptionOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionOverlay.swift; sourceTree = "<group>"; };
+		C557A0B9C51F946A64004D27 /* WhisperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperManager.swift; sourceTree = "<group>"; };
+		C6F6C4FA407342301AC10745 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+		E9EE85259C4D481928573F21 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		EEE2DE5D33AC5C1B84CF1957 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		018BA867CC929727C6C16974 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				C6F6C4FA407342301AC10745 /* Signing.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		115BBA3D655B99606C688871 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				30E7A524058E33A50156D5E6 /* AppDelegate.swift */,
+				E9EE85259C4D481928573F21 /* Log.swift */,
+				5BEDA2C96DB8412ECD7746F0 /* VoiceCommandManager.swift */,
+				C0E72725DBD71D8D23E7DEB8 /* VoxTypeApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2A4EDE1DE1B56E115564E1F0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				10C1F73F50F6814E20419DA4 /* VoxType.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2EA1AF0471BF080C7778BF14 /* HotKey */ = {
+			isa = PBXGroup;
+			children = (
+				9330ED0AFE5C86249665FBDD /* GlobalHotKeyManager.swift */,
+			);
+			path = HotKey;
+			sourceTree = "<group>";
+		};
+		3D9FAD92A28EE8A3CC6E332E = {
+			isa = PBXGroup;
+			children = (
+				018BA867CC929727C6C16974 /* Config */,
+				EE7A45A19EE126703332CF5A /* VoxType */,
+				2A4EDE1DE1B56E115564E1F0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		59EDCA263DE4A34F3D9B3528 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				2634667F263BB71B10BA9528 /* AppSettings.swift */,
+				A95D8760028FA9E8F20F790E /* KeychainStore.swift */,
+				99BE3042185AD9CFB1403282 /* PerfLog.swift */,
+				81F7958633711C2EDD737341 /* TranscriptionHistory.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		796FC27244B1717A180917B9 /* TextInsertion */ = {
+			isa = PBXGroup;
+			children = (
+				2E245CF7F0E26DFF662C3452 /* TextInsertionManager.swift */,
+			);
+			path = TextInsertion;
+			sourceTree = "<group>";
+		};
+		8314CF9C89070B308EDF9231 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				52E8DB91EBB124C4BC076307 /* AudioRecorder.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		87A24E835055EEF5EA1811C3 /* Transcription */ = {
+			isa = PBXGroup;
+			children = (
+				60CDA29721620241E7D32EAA /* HallucinationFilter.swift */,
+				9CC9F0D23E33D183247D1CB9 /* OllamaClient.swift */,
+				0164F83FF61E517C854D3412 /* OpenAIClient.swift */,
+				013F0CD7729A7310511CA6D3 /* TextPostProcessor.swift */,
+				C557A0B9C51F946A64004D27 /* WhisperManager.swift */,
+			);
+			path = Transcription;
+			sourceTree = "<group>";
+		};
+		D3A1586CA942C1D8AC74A122 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				AE4D56A3D8E7433EA73AB1FC /* HistoryView.swift */,
+				9C58DC772632EE9BB00F8F1B /* MenuBarManager.swift */,
+				EEE2DE5D33AC5C1B84CF1957 /* SettingsView.swift */,
+				C2D1AEC40493457704838510 /* TranscriptionOverlay.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		E21B265B70C916335A0290DE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				99ED6395E653A9333766C1F0 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		EE7A45A19EE126703332CF5A /* VoxType */ = {
+			isa = PBXGroup;
+			children = (
+				455E47D126EB8886237441E9 /* BridgingHeader.h */,
+				115BBA3D655B99606C688871 /* App */,
+				8314CF9C89070B308EDF9231 /* Audio */,
+				2EA1AF0471BF080C7778BF14 /* HotKey */,
+				E21B265B70C916335A0290DE /* Resources */,
+				59EDCA263DE4A34F3D9B3528 /* Storage */,
+				796FC27244B1717A180917B9 /* TextInsertion */,
+				87A24E835055EEF5EA1811C3 /* Transcription */,
+				D3A1586CA942C1D8AC74A122 /* UI */,
+			);
+			path = VoxType;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		023D8E8DB875C15BC13D5673 /* VoxType */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4396DF2ED929CB7F8368F16C /* Build configuration list for PBXNativeTarget "VoxType" */;
+			buildPhases = (
+				C09D06F080CAD3D95D7B31F5 /* Sources */,
+				29BF83B1080EA7C63D5B5B67 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VoxType;
+			packageProductDependencies = (
+			);
+			productName = VoxType;
+			productReference = 10C1F73F50F6814E20419DA4 /* VoxType.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AAEDFB7C1ACD7768531AB8C5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 63F87E0502C04F0EE19953B1 /* Build configuration list for PBXProject "VoxType" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3D9FAD92A28EE8A3CC6E332E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2A4EDE1DE1B56E115564E1F0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				023D8E8DB875C15BC13D5673 /* VoxType */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		29BF83B1080EA7C63D5B5B67 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7612C45B531F7439179C2128 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C09D06F080CAD3D95D7B31F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94BB4AA7D8D4C8A57F29F64D /* AppDelegate.swift in Sources */,
+				8F5B0806EF16A831C933FBE6 /* AppSettings.swift in Sources */,
+				A983A60394A13E8C5662F058 /* AudioRecorder.swift in Sources */,
+				411761E259833D3E62DE39C4 /* GlobalHotKeyManager.swift in Sources */,
+				3916BD0A8A0BCA1E50E50503 /* HallucinationFilter.swift in Sources */,
+				8E9B7004EC2155FC85CA83C0 /* HistoryView.swift in Sources */,
+				BF31431208738CC31E4647E2 /* KeychainStore.swift in Sources */,
+				65D73475A320AD0D769DBFB1 /* Log.swift in Sources */,
+				DB28DC3A85A725D36BD35EDE /* MenuBarManager.swift in Sources */,
+				F9C909D1009A2172A1468EA5 /* OllamaClient.swift in Sources */,
+				B39E7CAB970BFCD1326159C3 /* OpenAIClient.swift in Sources */,
+				7DE0CCF607BCF3D0DED5D12D /* PerfLog.swift in Sources */,
+				C84B9DF91891FD724E9F6C03 /* SettingsView.swift in Sources */,
+				DEF3C2F3373194A73CD1BD76 /* TextInsertionManager.swift in Sources */,
+				0FD0EFA06E579F53CCDC10D2 /* TextPostProcessor.swift in Sources */,
+				D714F54DBBDBA78E777CF791 /* TranscriptionHistory.swift in Sources */,
+				C0B07A2C3B9B1C287E0F0D23 /* TranscriptionOverlay.swift in Sources */,
+				B2735C3596FB9C9EC950101C /* VoiceCommandManager.swift in Sources */,
+				2314EDCCEACFF3513FBA0FA4 /* VoxTypeApp.swift in Sources */,
+				C53D63074FC6FB8D2E81B345 /* WhisperManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5B452DBEE818FF788BF58307 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B099418D70A738611C1B58FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C7E294564975E3D2343FA4A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6F6C4FA407342301AC10745 /* Signing.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = "VoxType/Resources/VoxType-Release.entitlements";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/whisper.cpp/include",
+					"$(PROJECT_DIR)/whisper.cpp/ggml/include",
+				);
+				INFOPLIST_FILE = VoxType/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/whisper.cpp/build/src",
+					"$(PROJECT_DIR)/whisper.cpp/build/ggml/src",
+					"$(PROJECT_DIR)/whisper.cpp/build/ggml/src/ggml-metal",
+					"$(PROJECT_DIR)/whisper.cpp/build/ggml/src/ggml-blas",
+				);
+				OTHER_LDFLAGS = (
+					"-lwhisper",
+					"-lggml",
+					"-lggml-base",
+					"-lggml-cpu",
+					"-lggml-metal",
+					"-lggml-blas",
+					"-lstdc++",
+					"-framework Accelerate",
+					"-framework Metal",
+					"-framework MetalKit",
+					"-framework Foundation",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.voxtype.app;
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = VoxType/BridgingHeader.h;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		F11DE61C7966717389A8F379 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6F6C4FA407342301AC10745 /* Signing.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = VoxType/Resources/VoxType.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/whisper.cpp/include",
+					"$(PROJECT_DIR)/whisper.cpp/ggml/include",
+				);
+				INFOPLIST_FILE = VoxType/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/whisper.cpp/build/src",
+					"$(PROJECT_DIR)/whisper.cpp/build/ggml/src",
+					"$(PROJECT_DIR)/whisper.cpp/build/ggml/src/ggml-metal",
+					"$(PROJECT_DIR)/whisper.cpp/build/ggml/src/ggml-blas",
+				);
+				OTHER_LDFLAGS = (
+					"-lwhisper",
+					"-lggml",
+					"-lggml-base",
+					"-lggml-cpu",
+					"-lggml-metal",
+					"-lggml-blas",
+					"-lstdc++",
+					"-framework Accelerate",
+					"-framework Metal",
+					"-framework MetalKit",
+					"-framework Foundation",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.voxtype.app;
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = VoxType/BridgingHeader.h;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4396DF2ED929CB7F8368F16C /* Build configuration list for PBXNativeTarget "VoxType" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F11DE61C7966717389A8F379 /* Debug */,
+				C7E294564975E3D2343FA4A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		63F87E0502C04F0EE19953B1 /* Build configuration list for PBXProject "VoxType" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B099418D70A738611C1B58FD /* Debug */,
+				5B452DBEE818FF788BF58307 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AAEDFB7C1ACD7768531AB8C5 /* Project object */;
+}

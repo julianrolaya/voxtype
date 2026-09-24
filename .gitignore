@@ -1,0 +1,19 @@
+# Build artifacts
+build/
+*.log
+DerivedData/
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+.build/
+
+# Per-machine signing override (see Config/Signing.xcconfig)
+Config/Local.xcconfig
+
+# macOS
+.DS_Store
+
+# Whisper models (large binaries, downloaded by setup.sh)
+*.bin
+*.ggml

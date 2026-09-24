@@ -1,0 +1,15 @@
+// Code signing for VoxType.
+//
+// The default is ad-hoc signing ("-"), which needs no certificate, so any
+// Mac can build the app. To sign with a certificate of your own (which keeps
+// macOS's Accessibility permission across rebuilds), create Config/Local.xcconfig
+// with a line like:
+//
+//     CODE_SIGN_IDENTITY = My Local Signing Cert
+//
+// Local.xcconfig is git-ignored. setup.sh also passes CODE_SIGN_IDENTITY on
+// the command line when it finds a "VoxType Local" certificate.
+
+CODE_SIGN_IDENTITY = -
+
+#include? "Local.xcconfig"

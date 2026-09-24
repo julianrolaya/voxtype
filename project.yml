@@ -1,0 +1,66 @@
+name: VoxType
+options:
+  bundleIdPrefix: com.voxtype
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    # Apple Silicon only: whisper.cpp is built for arm64 with Metal (setup.sh checks this).
+    ARCHS: arm64
+
+targets:
+  VoxType:
+    type: application
+    platform: macOS
+    sources:
+      - path: VoxType
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/VoxType.entitlements"
+          - "Resources/VoxType-Release.entitlements"
+    configFiles:
+      Debug: Config/Signing.xcconfig
+      Release: Config/Signing.xcconfig
+    settings:
+      configs:
+        Debug:
+          CODE_SIGN_ENTITLEMENTS: VoxType/Resources/VoxType.entitlements
+        Release:
+          CODE_SIGN_ENTITLEMENTS: VoxType/Resources/VoxType-Release.entitlements
+          # Xcode otherwise injects get-task-allow (debugger attach) into
+          # non-distribution signatures, including the build users install.
+          CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.voxtype.app
+        INFOPLIST_FILE: VoxType/Resources/Info.plist
+        CODE_SIGNING_REQUIRED: true
+        CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: true
+        SWIFT_OBJC_BRIDGING_HEADER: VoxType/BridgingHeader.h
+        HEADER_SEARCH_PATHS:
+          - "$(PROJECT_DIR)/whisper.cpp/include"
+          - "$(PROJECT_DIR)/whisper.cpp/ggml/include"
+        LIBRARY_SEARCH_PATHS:
+          - "$(PROJECT_DIR)/whisper.cpp/build/src"
+          - "$(PROJECT_DIR)/whisper.cpp/build/ggml/src"
+          - "$(PROJECT_DIR)/whisper.cpp/build/ggml/src/ggml-metal"
+          - "$(PROJECT_DIR)/whisper.cpp/build/ggml/src/ggml-blas"
+        OTHER_LDFLAGS:
+          - "-lwhisper"
+          - "-lggml"
+          - "-lggml-base"
+          - "-lggml-cpu"
+          - "-lggml-metal"
+          - "-lggml-blas"
+          - "-lstdc++"
+          - "-framework Accelerate"
+          - "-framework Metal"
+          - "-framework MetalKit"
+          - "-framework Foundation"
+        ENABLE_APP_SANDBOX: false
+        SWIFT_VERSION: "5.9"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
