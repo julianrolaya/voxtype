@@ -75,32 +75,48 @@ struct TextPostProcessor {
         }
     }
 
-    private static let fillerPatterns: [(pattern: String, options: NSRegularExpression.Options)] = {
-        let simpleFillers = [
-            "um", "umm", "uh", "uhh", "uh huh", "uh-huh",
-            "er", "err", "hmm", "hm", "mm",
-            "you know", "I mean", "right",
-            "eh", "este", "pues", "o sea", "digamos", "bueno pues"
-        ]
+    private static let interjections = [
+        "uh huh", "uh-huh", "umm", "uhh", "hmm", "err",
+        "um", "uh", "er", "hm", "mm", "eh",
+    ]
 
-        var patterns: [(String, NSRegularExpression.Options)] = []
+    private static let discourseMarkers = [
+        "bueno pues", "you know", "i mean", "o sea", "digamos",
+    ]
 
-        for filler in simpleFillers {
-            let escaped = NSRegularExpression.escapedPattern(for: filler)
-            let p = ",?\\s*\\b\(escaped)\\b\\s*,?"
-            patterns.append((p, [.caseInsensitive]))
+    private struct FillerRule {
+        let regex: NSRegularExpression
+        let requiresComma: Bool
+    }
+
+    private static let fillerRules: [FillerRule] = {
+        func rule(_ words: [String], requiresComma: Bool) -> FillerRule? {
+            let alternation = words
+                .sorted { $0.count > $1.count }
+                .map { NSRegularExpression.escapedPattern(for: $0) }
+                .joined(separator: "|")
+            let pattern = "(,)?\\s*\\b(?:\(alternation))\\b\\s*(,)?"
+            guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
+            else { return nil }
+            return FillerRule(regex: regex, requiresComma: requiresComma)
         }
-
-        return patterns
+        return [rule(interjections, requiresComma: false),
+                rule(discourseMarkers, requiresComma: true)].compactMap { $0 }
     }()
 
     private static func removeFillerWords(_ text: String) -> String {
         var result = text
 
-        for (pattern, options) in fillerPatterns {
-            guard let regex = try? NSRegularExpression(pattern: pattern, options: options) else { continue }
-            let range = NSRange(result.startIndex..., in: result)
-            result = regex.stringByReplacingMatches(in: result, options: [], range: range, withTemplate: " ")
+        for rule in fillerRules {
+            let matches = rule.regex.matches(
+                in: result, range: NSRange(location: 0, length: (result as NSString).length))
+            for match in matches.reversed() {
+                let hasLeadingComma = match.range(at: 1).location != NSNotFound
+                let hasTrailingComma = match.range(at: 2).location != NSNotFound
+                if rule.requiresComma && !hasLeadingComma && !hasTrailingComma { continue }
+                let replacement = (hasLeadingComma && hasTrailingComma) ? ", " : " "
+                result = (result as NSString).replacingCharacters(in: match.range, with: replacement)
+            }
         }
 
         result = result.replacingOccurrences(of: "\\s{2,}", with: " ", options: .regularExpression)

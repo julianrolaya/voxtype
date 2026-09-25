@@ -36,9 +36,13 @@ enum HallucinationFilter {
     private static func sentences(_ text: String) -> [String] {
         var out: [String] = []
         var current = ""
-        for ch in text {
+        let chars = Array(text)
+        for (i, ch) in chars.enumerated() {
             current.append(ch)
-            if ch == "." || ch == "!" || ch == "?" || ch == "…" {
+            guard ch == "." || ch == "!" || ch == "?" || ch == "…" else { continue }
+            let atEnd = i == chars.count - 1
+            let followedBySpace = !atEnd && chars[i + 1].isWhitespace
+            if atEnd || followedBySpace {
                 out.append(current)
                 current = ""
             }
@@ -53,7 +57,7 @@ enum HallucinationFilter {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 
-        if isHallucinatedSentence(trimmed) { return nil }
+        if phrases.contains(normalize(trimmed)) { return nil }
 
         var parts = sentences(trimmed)
 
