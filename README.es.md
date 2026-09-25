@@ -4,6 +4,13 @@
 
 *[Read in English](README.md)*
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/user/img/widget-dark.png">
+    <img src="docs/user/img/widget-light.png" width="720" alt="El widget flotante de VoxType en cada uno de sus estados: listo, escuchando, transcribiendo y mostrando el resultado, en disposición horizontal y vertical.">
+  </picture>
+</p>
+
 ---
 
 ## Requisitos
@@ -15,6 +22,8 @@
 
 ## Instalación
 
+> **Descárgalo con `git clone`, no con el zip "Source code" de la página de Releases.** El zip no incluye el motor de voz (un submódulo de git), así que el instalador no puede terminar.
+
 Abre la **Terminal** (presiona ⌘ Espacio, escribe *Terminal* y presiona Retorno) y pega:
 
 ```bash
@@ -22,6 +31,21 @@ git clone --recursive https://github.com/julianrolaya/voxtype.git
 cd voxtype
 ./setup.sh
 ```
+
+<details>
+<summary><b>¿Nunca has usado la Terminal? Qué esperar</b></summary>
+
+<br>
+
+La Terminal es una ventana donde escribes o pegas instrucciones. Nada cambia en tu Mac hasta que presionas **Retorno**.
+
+- **Pega las tres líneas de arriba** (⌘ V) y presiona Retorno. Se ejecutan una tras otra.
+- **Puede aparecer una ventana pidiendo instalar las "herramientas de desarrollo de línea de comandos"** la primera vez que uses `git`. Es macOS quien lo pide. Haz clic en **Instalar**, espera a que termine y vuelve a pegar las líneas.
+- **Puede pedirte tu contraseña.** Escribe la que usas para entrar a tu Mac. Mientras escribes no aparece nada, ni siquiera puntos. Es normal. Presiona Retorno al terminar.
+- **Algunos pasos son lentos.** Descargar Xcode (si aún no lo tienes) y el modelo de voz depende de tu conexión. El instalador dice qué está haciendo en cada paso.
+- **Si se detiene, vuelve a correrlo.** Abre la Terminal, escribe `cd voxtype`, presiona Retorno y luego `./setup.sh`. Continúa donde se quedó y salta lo que ya está hecho.
+
+</details>
 
 El instalador te guía en todo, paso a paso y numerado:
 
@@ -50,9 +74,32 @@ Busca el ícono de VoxType en la barra de menús, arriba a la derecha de la pant
 
 - **Mantén ⌥ Opción + Espacio**, habla y suelta. El texto se escribe donde está el cursor.
 - O **toca ⌥ Espacio** una vez para empezar y otra vez para terminar. Es útil para dictados largos.
-- Mientras VoxType escucha, un pequeño widget flotante muestra el estado. Desde ahí puedes cancelar o copiar el último resultado.
+- Mientras VoxType trabaja, un pequeño widget flotante muestra lo que está haciendo (ver más abajo).
 
 En **ícono de la barra de menús → Settings** eliges el modelo de voz y el idioma (detección automática, inglés o español), quitas muletillas ("eh", "um") y agregas **vocabulario personalizado**: nombres y términos que el modelo debe esperar. **History** muestra tus dictados recientes.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/user/img/settings-dark.png">
+    <img src="docs/user/img/settings-light.png" width="380" alt="La ventana de Settings de VoxType: modelo de voz, idioma, quitar muletillas, mantener el micrófono listo, vocabulario personalizado, tamaño del widget, limpieza con IA y atajo.">
+  </picture>
+</p>
+
+### El widget
+
+Una pequeña píldora flota sobre tus demás ventanas para que siempre veas qué está haciendo VoxType.
+
+| Ves | Significa |
+|---|---|
+| Un punto tenue | Listo |
+| Un punto brillante con barras en movimiento | Escuchando |
+| Lo mismo con las barras quietas | Transcribiendo |
+| Tu texto | El resultado, visible unos segundos mientras se pega. Haz clic para cerrarlo. |
+
+- **Cancela cuando quieras.** Haz clic en la **✕** del widget, o presiona ⌥ Espacio otra vez mientras transcribe. No se pega nada.
+- **¿No estaba el cursor en un campo de texto?** Después de cada dictado aparece en el widget un pequeño botón de copiar durante un par de minutos, para que pongas el último resultado en el portapapeles y lo pegues tú.
+- **Las palabras dudosas se subrayan en ámbar.** El modelo de voz informa qué tan seguro estuvo de cada palabra, y las que menos le convencieron se marcan para que sepas dónde mirar. Solo aplica cuando la limpieza con IA está apagada, porque esa limpieza reescribe las palabras que el modelo puntuó.
+- **Ponlo donde quieras.** Arrástralo a cualquier lugar. Suéltalo cerca del borde izquierdo o derecho de la pantalla y se vuelve vertical para no estorbar. **Ícono de la barra de menús → Reset Widget Position** lo devuelve al centro inferior. Puedes cambiar su tamaño en Settings.
 
 ### Comandos de voz
 
@@ -65,6 +112,7 @@ Si dices uno de estos comandos solo, sin nada más, VoxType ejecuta la acción e
 | "borrar todo" / "delete all" | Selecciona todo y lo borra |
 | "seleccionar todo" / "select all" | ⌘A |
 | "copiar" / "copy" · "pegar" / "paste" · "cortar" / "cut" | ⌘C · ⌘V · ⌘X |
+| "nueva línea" / "new line" | Retorno |
 
 ## Opcional: limpieza del texto con IA
 
@@ -117,6 +165,19 @@ Revisa [docs/user/troubleshooting.es.md](docs/user/troubleshooting.es.md). Lo m�
 - **El texto aparece en el widget pero no se pega.** Activa el permiso de Accesibilidad. Si ya se ve activado, quita VoxType de la lista con **−** y vuelve a agregarlo con **+**.
 - **"VoxType needs a speech model".** Corre `./setup.sh --model`.
 - **El instalador falló.** Vuelve a correrlo, continúa donde se quedó. El log completo está en `build/setup.log`.
+
+## Compilar a mano (para desarrolladores)
+
+```bash
+git submodule update --init
+cmake -S whisper.cpp -B whisper.cpp/build -DCMAKE_BUILD_TYPE=Release -DGGML_METAL=ON \
+  -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 -DBUILD_SHARED_LIBS=OFF \
+  -DWHISPER_BUILD_EXAMPLES=OFF -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_SERVER=OFF
+cmake --build whisper.cpp/build --config Release -j"$(sysctl -n hw.ncpu)"
+open VoxType.xcodeproj
+```
+
+El proyecto de Xcode se genera desde `project.yml` con [XcodeGen](https://github.com/yonaskolb/XcodeGen). Las compilaciones se firman ad-hoc por defecto. Para firmar con tu propio certificado, crea `Config/Local.xcconfig` (ver `Config/Signing.xcconfig`). Eso además conserva el permiso de Accesibilidad entre compilaciones.
 
 ## Licencia
 

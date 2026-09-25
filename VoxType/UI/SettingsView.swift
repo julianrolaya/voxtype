@@ -4,6 +4,12 @@ struct SettingsView: View {
     @ObservedObject var settings = AppSettings.shared
     @State private var connectionStatus: String = ""
 
+    private var versionLabel: String {
+        guard let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String, !v.isEmpty
+        else { return "" }
+        return "v" + v
+    }
+
     var body: some View {
         Form {
             Section("Transcription") {
@@ -30,9 +36,8 @@ struct SettingsView: View {
                            + "you press. macOS will show the microphone indicator "
                            + "continuously — audio is held in memory only and never leaves "
                            + "your Mac."
-                         : "Off: the microphone opens on each press, which takes about "
-                           + "160 ms — words spoken at the very instant you press can be "
-                           + "cut off.")
+                         : "Off: the microphone opens on each press, so words spoken at "
+                           + "the very instant you press can be cut off.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -41,8 +46,10 @@ struct SettingsView: View {
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Custom Vocabulary")
-                    TextField("Product names, technical terms, people — comma separated",
-                              text: $settings.customVocabulary, axis: .vertical)
+                    TextField("Custom Vocabulary", text: $settings.customVocabulary,
+                              prompt: Text("Product names, technical terms, people — comma separated"),
+                              axis: .vertical)
+                        .labelsHidden()
                         .lineLimit(4...8)
                         .textFieldStyle(.roundedBorder)
                     Text("Words the model should expect. Improves accuracy on names it "
@@ -164,7 +171,7 @@ struct SettingsView: View {
                 HStack {
                     Text("VoxType")
                     Spacer()
-                    Text("v0.1.0")
+                    Text(versionLabel)
                         .foregroundStyle(.secondary)
                 }
                 Text("100% offline voice dictation for macOS")

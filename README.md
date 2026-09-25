@@ -4,6 +4,13 @@
 
 *[Leer en español](README.es.md)*
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/user/img/widget-dark.png">
+    <img src="docs/user/img/widget-light.png" width="720" alt="VoxType's floating widget in each of its states: ready, listening, transcribing, and showing the result, in both horizontal and vertical layouts.">
+  </picture>
+</p>
+
 ---
 
 ## Requirements
@@ -15,6 +22,8 @@
 
 ## Install
 
+> **Get it with `git clone`, not the "Source code" zip on the Releases page.** The zip leaves out the speech engine (a git submodule), so the installer can't finish.
+
 Open **Terminal** (press ⌘ Space, type *Terminal*, press Return) and paste:
 
 ```bash
@@ -22,6 +31,21 @@ git clone --recursive https://github.com/julianrolaya/voxtype.git
 cd voxtype
 ./setup.sh
 ```
+
+<details>
+<summary><b>New to Terminal? What to expect</b></summary>
+
+<br>
+
+Terminal is a window where you type or paste instructions. Nothing changes on your Mac until you press **Return**.
+
+- **Paste the three lines above** (⌘ V) and press Return. They run one after another.
+- **A window may appear asking to install "command line developer tools"** the first time you use `git`. That is macOS asking. Click **Install**, wait for it to finish, then paste the lines again.
+- **It may ask for your password.** Type the password you use to log in to your Mac. Nothing appears while you type, not even dots. That is normal. Press Return when you are done.
+- **Some steps are slow.** Downloading Xcode (if you don't have it yet) and the speech model depend on your connection. The installer says what it is doing at every step.
+- **If it stops, run it again.** Open Terminal, type `cd voxtype`, press Return, then `./setup.sh`. It picks up where it left off and skips what is already done.
+
+</details>
 
 The installer walks you through everything, one numbered step at a time:
 
@@ -50,9 +74,32 @@ Look for the VoxType icon in the menu bar at the top right of your screen.
 
 - **Hold ⌥ Option + Space**, speak, and release. The text is typed where your cursor is.
 - Or **tap ⌥ Space** once to start, and tap it again to stop. This is handy for longer dictation.
-- While VoxType is listening, a small floating widget shows its status. You can cancel from there or copy the last result.
+- While VoxType works, a small floating widget shows what it is doing (see below).
 
 **Menu bar icon → Settings** lets you choose the speech model and language (Auto-detect, English or Spanish), remove filler words ("um", "eh"), and add **custom vocabulary**: names and terms the model should expect. **History** shows your recent dictations.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/user/img/settings-dark.png">
+    <img src="docs/user/img/settings-light.png" width="380" alt="VoxType's Settings window: speech model, language, filler word removal, keep microphone ready, custom vocabulary, widget size, AI cleanup and shortcut.">
+  </picture>
+</p>
+
+### The widget
+
+A small pill floats above your other windows so you can always see what VoxType is doing.
+
+| You see | It means |
+|---|---|
+| A dim dot | Ready |
+| A glowing dot with moving bars | Listening |
+| The same with the bars still | Transcribing |
+| Your text | The result, shown for a few seconds while it is pasted. Click it to dismiss. |
+
+- **Cancel any time.** Click the **✕** on the widget, or press ⌥ Space again while it is transcribing. Nothing is pasted.
+- **Missed the text field?** After each dictation a small copy button appears on the widget for a couple of minutes, so you can put the last result on the clipboard and paste it yourself.
+- **Uncertain words are underlined in amber.** The speech model reports how sure it was of each word, and the ones it was least sure of are marked so you know where to look. This only applies when AI cleanup is off, because cleanup rewrites the words the model scored.
+- **Put it where you like.** Drag it anywhere. Drop it near the left or right edge of the screen and it turns vertical to stay out of the way. **Menu bar icon → Reset Widget Position** brings it back to the bottom centre. You can change its size in Settings.
 
 ### Voice commands
 
@@ -65,6 +112,7 @@ If you say one of these on its own, VoxType performs the action instead of typin
 | "delete all" / "borrar todo" | Selects everything and deletes it |
 | "select all" / "seleccionar todo" | ⌘A |
 | "copy" / "copiar" · "paste" / "pegar" · "cut" / "cortar" | ⌘C · ⌘V · ⌘X |
+| "new line" / "nueva línea" | Return |
 
 ## Optional: AI text cleanup
 

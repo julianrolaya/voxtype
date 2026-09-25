@@ -8,6 +8,12 @@ Start here: **running `./setup.sh` again is always safe.** It skips what is alre
 
 **It asks for my password** — Only for Xcode's one-time setup (accepting its license, finishing its first launch) and, if you agree, for installing Homebrew. Type your Mac login password. Nothing appears on screen while you type; that's normal.
 
+**A window asks to install "command line developer tools"** — macOS asks this the first time you use `git`. Click **Install**, wait until it says it finished, then paste the installation lines again.
+
+**"No such file or directory" or "command not found: ./setup.sh"** — Terminal isn't inside the VoxType folder. Type `cd voxtype`, press Return, and run `./setup.sh` again. If you cloned it somewhere other than your home folder, type `cd ` (with a space after it) and drag the VoxType folder into the Terminal window before pressing Return.
+
+**I downloaded the "Source code" zip and the installer fails** — The zip leaves out the speech engine, which is a git submodule, and a zip is not a git repository, so the missing part can't be fetched afterwards. Delete it and follow the [Install](../../README.md#install) steps, which use `git clone --recursive`.
+
 **"The whisper.cpp folder is empty"** — The project was downloaded without its speech engine. Run `git submodule update --init` inside the folder, or clone again with `git clone --recursive`.
 
 **The model download stopped** — Run `./setup.sh --model`. The download resumes where it stopped, and every file is checked against a known checksum before use.

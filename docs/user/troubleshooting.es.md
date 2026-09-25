@@ -8,6 +8,12 @@ Empieza por aquí: **volver a correr `./setup.sh` siempre es seguro.** Salta lo 
 
 **Me pide la contraseña** — Solo para la configuración única de Xcode (aceptar su licencia y terminar su primer arranque) y, si aceptas, para instalar Homebrew. Escribe la contraseña con la que entras a tu Mac. Mientras escribes no aparece nada en pantalla, es normal.
 
+**Una ventana pide instalar las "herramientas de desarrollo de línea de comandos"** — macOS lo pide la primera vez que usas `git`. Haz clic en **Instalar**, espera a que diga que terminó y vuelve a pegar las líneas de instalación.
+
+**"No such file or directory" o "command not found: ./setup.sh"** — La Terminal no está dentro de la carpeta de VoxType. Escribe `cd voxtype`, presiona Retorno y vuelve a correr `./setup.sh`. Si lo clonaste en un lugar distinto de tu carpeta personal, escribe `cd ` (con un espacio después), arrastra la carpeta de VoxType a la ventana de la Terminal y presiona Retorno.
+
+**Descargué el zip "Source code" y el instalador falla** — El zip no incluye el motor de voz, que es un submódulo de git, y un zip no es un repositorio de git, así que la parte que falta no se puede bajar después. Bórralo y sigue los pasos de [Instalación](../../README.es.md#instalación), que usan `git clone --recursive`.
+
 **"The whisper.cpp folder is empty"** — El proyecto se descargó sin su motor de voz. Corre `git submodule update --init` dentro de la carpeta, o vuelve a clonar con `git clone --recursive`.
 
 **La descarga del modelo se detuvo** — Corre `./setup.sh --model`. La descarga continúa donde se quedó, y cada archivo se compara con un checksum conocido antes de usarse.

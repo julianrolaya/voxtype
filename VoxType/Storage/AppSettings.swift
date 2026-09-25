@@ -123,9 +123,9 @@ class AppSettings: ObservableObject {
         var id: String { rawValue }
         var displayName: String {
             switch self {
-            case .small: return "Pequeño"
-            case .medium: return "Medio"
-            case .large: return "Grande"
+            case .small: return "Small"
+            case .medium: return "Medium"
+            case .large: return "Large"
             }
         }
     }
