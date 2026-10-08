@@ -2,8 +2,11 @@ import Foundation
 
 class WhisperManager {
     private var context: OpaquePointer?
-    private var loadedModelName: String?
+    private(set) var loadedModel: AppSettings.ModelOption?
+    var loadedModelName: String? { loadedModel?.rawValue }
     private let settings = AppSettings.shared
+
+    private let engineLock = NSLock()
 
     var isModelLoaded: Bool { context != nil }
 
@@ -22,10 +25,7 @@ class WhisperManager {
 
     private(set) var lastLanguage: String?
 
-    var modelsDirectory: URL {
-        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        return appSupport.appendingPathComponent("VoxType/Models")
-    }
+    var modelsDirectory: URL { AppSettings.ModelOption.modelsDirectory }
 
     static let vadModelFile = "ggml-silero-v5.1.2.bin"
     static let vadThreshold: Float = 0.5
@@ -59,16 +59,20 @@ class WhisperManager {
         return whisper_vad_segments_n_segments(segments) > 0
     }
 
-    func loadModel() async {
+    func loadModel(_ model: AppSettings.ModelOption) async {
         loadVADIfNeeded()
-        let modelFile = settings.selectedModel.fileName
+        engineLock.withLock { loadModelLocked(model) }
+    }
 
-        if loadedModelName == modelFile && context != nil { return }
+    private func loadModelLocked(_ model: AppSettings.ModelOption) {
+        let modelFile = model.fileName
+
+        if loadedModel == model && context != nil { return }
 
         if let ctx = context {
             whisper_free(ctx)
             context = nil
-            loadedModelName = nil
+            loadedModel = nil
         }
 
         try? FileManager.default.createDirectory(at: modelsDirectory, withIntermediateDirectories: true)
@@ -88,7 +92,7 @@ class WhisperManager {
         lastModelLoadMs = (CFAbsoluteTimeGetCurrent() - loadStart) * 1000
 
         if context != nil {
-            loadedModelName = modelFile
+            loadedModel = model
             isColdStart = true
             Log.transcription.info("Model loaded in \(self.lastModelLoadMs, format: .fixed(precision: 0)) ms")
         } else {
@@ -97,6 +101,10 @@ class WhisperManager {
     }
 
     func transcribe(audioData: [Float]) async -> String? {
+        engineLock.withLock { transcribeLocked(audioData) }
+    }
+
+    private func transcribeLocked(_ audioData: [Float]) -> String? {
         guard let ctx = context else {
             Log.transcription.error("Model not loaded")
             return nil
@@ -217,10 +225,13 @@ class WhisperManager {
     }
 
     func shutdown() {
-        if let ctx = context {
-            whisper_free(ctx)
-            context = nil
-            loadedModelName = nil
+        cancel()
+        engineLock.withLock {
+            if let ctx = context {
+                whisper_free(ctx)
+                context = nil
+                loadedModel = nil
+            }
         }
         if let vctx = vadContext {
             whisper_vad_free(vctx)

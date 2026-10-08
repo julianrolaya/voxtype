@@ -11,6 +11,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let history = TranscriptionHistory.shared
     private let settings = AppSettings.shared
     private var warmObserver: AnyCancellable?
+    private var modelObserver: AnyCancellable?
 
     private var transcriptionTask: Task<Void, Never>?
     private var isCancelling = false
@@ -21,11 +22,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         case idle
         case recording
         case processing
+
+        var allowsModelSwap: Bool {
+            switch self {
+            case .idle, .modelUnavailable: return true
+            case .loadingModel, .recording, .processing: return false
+            }
+        }
     }
 
     private var state: AppState = .idle {
         didSet {
             menuBarManager?.updateState(state)
+            if state == .idle {
+                DispatchQueue.main.async { [weak self] in self?.reloadModelIfNeeded() }
+            }
         }
     }
 
@@ -49,14 +60,64 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.audioRecorder.setWarm(warm)
         }
 
+        modelObserver = settings.$selectedModel
+            .dropFirst()
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.reloadModelIfNeeded() }
+
+        loadSelectedModel()
+    }
+
+    private func reloadModelIfNeeded() {
+        guard state.allowsModelSwap else { return }
+        guard whisperManager.loadedModel != settings.selectedModel || !whisperManager.isModelLoaded
+        else { return }
+        loadSelectedModel()
+    }
+
+    private func loadSelectedModel() {
+        let selected = settings.selectedModel
+        let previous = whisperManager.loadedModel
+        let isSwitch = previous != nil
+
+        guard let target = AppSettings.ModelOption.resolve(
+            selected: selected,
+            installed: AppSettings.ModelOption.installed(),
+            loaded: previous
+        ) else {
+            state = .modelUnavailable
+            showModelMissingAlert()
+            return
+        }
+
+        if target != selected {
+            Log.app.notice("Model \(selected.rawValue, privacy: .public) is not installed; using \(target.rawValue, privacy: .public)")
+            overlay.showNotice("\(selected.shortName) isn't installed — using \(target.shortName)")
+            settings.selectedModel = target
+        }
+
+        if target == previous && whisperManager.isModelLoaded {
+            if state == .modelUnavailable { state = .idle }
+            return
+        }
+
+        state = .loadingModel
         Task {
-            await whisperManager.loadModel()
+            await whisperManager.loadModel(target)
             await MainActor.run {
                 if whisperManager.isModelLoaded {
                     state = .idle
-                    if whisperManager.lastModelLoadMs > 2000 {
+                    if isSwitch {
+                        overlay.showNotice("Using \(target.shortName)")
+                    } else if whisperManager.lastModelLoadMs > 2000 {
                         menuBarManager.showNotification("Ready")
                     }
+                } else if let previous = previous, previous != target {
+                    Log.app.error("Could not load \(target.rawValue, privacy: .public); returning to \(previous.rawValue, privacy: .public)")
+                    overlay.showNotice("Couldn't load \(target.shortName) — back to \(previous.shortName)")
+                    settings.selectedModel = previous
+                    state = .modelUnavailable
                 } else {
                     state = .modelUnavailable
                     showModelMissingAlert()
@@ -172,7 +233,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             llmEnabled: settings.ollamaEnabled,
             isColdStart: whisperManager.isColdStart
         )
-        PerfLog.shared.set("model", settings.selectedModel.rawValue)
+        PerfLog.shared.set("model", whisperManager.loadedModelName ?? "none")
         PerfLog.shared.set("model_load_ms", whisperManager.lastModelLoadMs)
 
         let levels = AudioLevels.measure(audioData)

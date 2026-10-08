@@ -19,7 +19,32 @@ class AppSettings: ObservableObject {
             case .small:      return "Small"
             }
         }
+        var shortName: String {
+            switch self {
+            case .largeTurbo: return "Large V3 Turbo"
+            case .medium:     return "Medium"
+            case .small:      return "Small"
+            }
+        }
         var fileName: String { rawValue + ".bin" }
+
+        static var modelsDirectory: URL {
+            let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            return appSupport.appendingPathComponent("VoxType/Models")
+        }
+
+        static func installed(in directory: URL = modelsDirectory) -> Set<ModelOption> {
+            Set(allCases.filter {
+                FileManager.default.fileExists(atPath: directory.appendingPathComponent($0.fileName).path)
+            })
+        }
+
+        static func resolve(selected: ModelOption, installed: Set<ModelOption>,
+                            loaded: ModelOption?) -> ModelOption? {
+            if installed.contains(selected) { return selected }
+            if let loaded = loaded { return loaded }
+            return allCases.first { installed.contains($0) }
+        }
     }
 
     enum LanguageOption: String, CaseIterable, Identifiable {

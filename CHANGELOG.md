@@ -6,6 +6,15 @@ To update an existing install, run `./setup.sh --update` from your VoxType folde
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-10-08
+
+Choosing another speech model in Settings now works without restarting VoxType.
+
+### Fixed
+
+- **Choosing another speech model in Settings did nothing until VoxType was restarted.** The new model now loads as soon as VoxType is idle, and the widget confirms it (*Using Small*). If the chosen model isn't installed, VoxType keeps using one that is and says so.
+- Settings now lists only the models you have installed, and says how to add another one.
+
 ## [0.2.0] — 2026-10-08
 
 AI cleanup now answers in the language you spoke, VoxType no longer pastes anything when you didn't speak, and the widget stays put.
@@ -18,7 +27,7 @@ AI cleanup now answers in the language you spoke, VoxType no longer pastes anyth
 
 - **AI cleanup could change the language of your text.** With Ollama cleanup on, English dictation could come back in Spanish (and the other way around), and the Formatter sometimes answered a dictated question or wrote code instead of just correcting it. VoxType now tells the model which language you spoke, and the Formatter keeps your words.
 - **Pressing the shortcut without speaking pasted text.** Silence or room noise could turn into phrases like "And the other.", and the Assistant would reply to them and paste the reply.
-- **The widget jumped when recording started and stopped.** It no longer moves between states, no longer drifts sideways over many dictations, and opens in the right place.
+- **The widget jumped when recording started and stopped.** It no longer moves between states and no longer drifts sideways over many dictations.
 - **Changing the microphone while VoxType was open could stop recording.** It now follows the new input. If the input is an empty headphone jack (for example, speakers plugged in), the notice says to check System Settings → Sound.
 - Three labels in Settings were corrected.
 

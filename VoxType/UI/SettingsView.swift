@@ -13,12 +13,24 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section("Transcription") {
-                Picker("Model", selection: $settings.selectedModel) {
-                    ForEach(AppSettings.ModelOption.allCases) { option in
-                        Text(option.displayName).tag(option)
+                let installed = AppSettings.ModelOption.installed()
+                let missing = AppSettings.ModelOption.allCases.filter { !installed.contains($0) }
+                VStack(alignment: .leading, spacing: 4) {
+                    Picker("Model", selection: $settings.selectedModel) {
+                        ForEach(AppSettings.ModelOption.allCases.filter { installed.contains($0) }) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    if !missing.isEmpty {
+                        Text("Not installed: \(missing.map(\.shortName).joined(separator: ", ")). "
+                             + "To add one, run ./setup.sh --model in the folder where you "
+                             + "downloaded VoxType.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
-                .pickerStyle(.menu)
 
                 Picker("Language", selection: $settings.language) {
                     ForEach(AppSettings.LanguageOption.allCases) { option in
