@@ -53,7 +53,7 @@ The installer walks you through everything, one numbered step at a time:
 2. Checks Xcode, and helps you finish setting it up if needed
 3. Installs the one build tool it needs (`cmake`, through [Homebrew](https://brew.sh)), after asking you first
 4. Builds the speech engine
-5. Downloads a speech model (you choose which one) and verifies its checksum
+5. Downloads a speech model (you choose which one) and a small voice detector, and verifies their checksums
 6. *Optional:* sets up [Ollama](https://ollama.com) for local AI text cleanup
 7. Builds VoxType, installs it in **Applications**, and opens the permission screen for you
 
@@ -97,6 +97,7 @@ A small pill floats above your other windows so you can always see what VoxType 
 | Your text | The result, shown for a few seconds while it is pasted. Click it to dismiss. |
 
 - **Cancel any time.** Click the **✕** on the widget, or press ⌥ Space again while it is transcribing. Nothing is pasted.
+- **Nothing said?** If you press the shortcut and don't speak, the widget shows *No speech detected* and nothing is pasted.
 - **Missed the text field?** After each dictation a small copy button appears on the widget for a couple of minutes, so you can put the last result on the clipboard and paste it yourself.
 - **Uncertain words are underlined in amber.** The speech model reports how sure it was of each word, and the ones it was least sure of are marked so you know where to look. This only applies when AI cleanup is off, because cleanup rewrites the words the model scored.
 - **Put it where you like.** Drag it anywhere. Drop it near the left or right edge of the screen and it turns vertical to stay out of the way. **Menu bar icon → Reset Widget Position** brings it back to the bottom centre. You can change its size in Settings.

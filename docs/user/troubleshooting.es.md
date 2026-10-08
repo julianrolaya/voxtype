@@ -22,6 +22,8 @@ Empieza por aquí: **volver a correr `./setup.sh` siempre es seguro.** Salta lo 
 
 ## Usando VoxType
 
+**"No speech detected", pero sí hablé** — VoxType escucha la entrada elegida en **Ajustes del Sistema → Sonido → Entrada**. Revisa que sea el micrófono que estás usando y que su nivel se mueva al hablar. Una causa común son bocinas o audífonos sin micrófono conectados al jack de audífonos: macOS puede cambiar la entrada a ese jack, que no graba nada.
+
 **No pasa nada al presionar ⌥ Espacio**
 1. Revisa que el ícono de VoxType esté en la barra de menús. Si no está, abre VoxType desde Aplicaciones.
 2. Puede que otra app ya use ⌥ Espacio (algunos lanzadores y selectores de idioma del teclado lo hacen). Ciérrala o cámbiale el atajo.

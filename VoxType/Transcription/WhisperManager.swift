@@ -20,12 +20,47 @@ class WhisperManager {
 
     private(set) var lastWordConfidences: [(word: String, confidence: Float)] = []
 
+    private(set) var lastLanguage: String?
+
     var modelsDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         return appSupport.appendingPathComponent("VoxType/Models")
     }
 
+    static let vadModelFile = "ggml-silero-v5.1.2.bin"
+    static let vadThreshold: Float = 0.5
+
+    private var vadContext: OpaquePointer?
+
+    private func loadVADIfNeeded() {
+        guard vadContext == nil else { return }
+        let path = modelsDirectory.appendingPathComponent(Self.vadModelFile).path
+        guard FileManager.default.fileExists(atPath: path) else {
+            Log.transcription.notice("Voice detector model not installed (\(Self.vadModelFile, privacy: .public)); every capture goes to Whisper. Run ./setup.sh --model")
+            return
+        }
+        var params = whisper_vad_default_context_params()
+        params.n_threads = 4
+        params.use_gpu = false
+        vadContext = whisper_vad_init_from_file_with_params(path, params)
+        if vadContext == nil { Log.transcription.error("Failed to load the voice detector") }
+    }
+
+    func hasSpeech(_ samples: [Float]) -> Bool? {
+        guard let vctx = vadContext, !samples.isEmpty else { return nil }
+        var params = whisper_vad_default_params()
+        params.threshold = Self.vadThreshold
+        let probe = AudioLevels.normalizedForDetection(samples)
+        let segments = probe.withUnsafeBufferPointer {
+            whisper_vad_segments_from_samples(vctx, params, $0.baseAddress, Int32($0.count))
+        }
+        guard let segments else { return nil }
+        defer { whisper_vad_free_segments(segments) }
+        return whisper_vad_segments_n_segments(segments) > 0
+    }
+
     func loadModel() async {
+        loadVADIfNeeded()
         let modelFile = settings.selectedModel.fileName
 
         if loadedModelName == modelFile && context != nil { return }
@@ -137,6 +172,7 @@ class WhisperManager {
         }
 
         lastWordConfidences = collectWordConfidences(ctx: ctx, segments: nSegments)
+        lastLanguage = whisper_lang_str(whisper_full_lang_id(ctx)).map { String(cString: $0) }
 
         let trimmed = fullText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
@@ -186,6 +222,10 @@ class WhisperManager {
             context = nil
             loadedModelName = nil
         }
+        if let vctx = vadContext {
+            whisper_vad_free(vctx)
+            vadContext = nil
+        }
     }
 
     func cancel() {
@@ -196,6 +236,9 @@ class WhisperManager {
         abortFlag.deallocate()
         if let ctx = context {
             whisper_free(ctx)
+        }
+        if let vctx = vadContext {
+            whisper_vad_free(vctx)
         }
     }
 }

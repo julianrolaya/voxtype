@@ -17,6 +17,8 @@ BUNDLE_ID="com.voxtype.app"
 APP_NAME="VoxType.app"
 MODELS_DIR="$HOME/Library/Application Support/VoxType/Models"
 MODEL_BASE_URL="https://huggingface.co/ggerganov/whisper.cpp/resolve/main"
+VAD_MODEL="ggml-silero-v5.1.2.bin"   # must match WhisperManager.vadModelFile
+VAD_BASE_URL="https://huggingface.co/ggml-org/whisper-vad/resolve/main"
 WHISPER_DIR="$REPO_DIR/whisper.cpp"
 WHISPER_STAMP="$WHISPER_DIR/build/.voxtype-built-commit"
 DERIVED_DATA="$REPO_DIR/build/DerivedData"
@@ -244,6 +246,31 @@ install_model() {
     ok "VoxType will use $name"
 }
 
+# The voice detector lets VoxType ignore a press where nothing was said, instead of
+# transcribing the room's noise. It runs on every install and update, separately from
+# install_model, which stops early once a speech model exists. VoxType works without it,
+# so a failed download is a warning, not a stop.
+install_vad_model() {
+    local dest="$MODELS_DIR/$VAD_MODEL"
+    mkdir -p "$MODELS_DIR"
+    if model_is_valid "$VAD_MODEL"; then
+        ok "Voice detector ready"
+        return
+    fi
+    info "Downloading the voice detector (under 1 MB)…"
+    if ! curl -L --fail --progress-bar -C - -o "$dest.part" "$VAD_BASE_URL/$VAD_MODEL"; then
+        warn "The voice detector did not download. VoxType works without it; run ./setup.sh --model to try again."
+        return
+    fi
+    mv "$dest.part" "$dest"
+    if ! model_is_valid "$VAD_MODEL"; then
+        rm -f "$dest"
+        warn "The voice detector file was corrupted and was deleted. Run ./setup.sh --model to try again."
+        return
+    fi
+    ok "Voice detector downloaded and verified"
+}
+
 # ── 6. Ollama (optional) ────────────────────────────────────────────────────
 ollama_up() { curl -s --max-time 2 http://localhost:11434/api/tags >/dev/null 2>&1; }
 
@@ -387,7 +414,7 @@ done
 echo "${BOLD}VoxType setup${RESET} ${DIM}— offline voice dictation for macOS${RESET}"
 
 case "$MODE" in
-    model)  ONLY_MODEL=1 install_model; echo; echo "  Quit and reopen VoxType to load the new model."; exit 0 ;;
+    model)  ONLY_MODEL=1 install_model; install_vad_model; echo; echo "  Quit and reopen VoxType to load the new model."; exit 0 ;;
     ollama) ONLY_OLLAMA=1 setup_ollama; exit 0 ;;
     update) update ;;
 esac
@@ -397,6 +424,7 @@ check_xcode
 check_tools
 build_whisper
 install_model
+install_vad_model
 if [[ "$SKIP_OLLAMA" == 1 || "$MODE" == "update" ]]; then
     step 6 "Ollama — optional AI text cleanup"; info "Skipped"
 else

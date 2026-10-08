@@ -65,6 +65,8 @@ class OverlayPanel: NSPanel {
     private var dragWindowOrigin: NSPoint?
     private var didDrag = false
 
+    var isDragging: Bool { didDrag }
+
     private let dragSlop: CGFloat = 3
 
     override func sendEvent(_ event: NSEvent) {
@@ -139,25 +141,35 @@ class TranscriptionOverlay {
 
         let floor = NSSize(width: overlayModel.sizeFloor.width + Halo.inset * 2,
                            height: overlayModel.sizeFloor.height + Halo.inset * 2)
-        var newSize = measuredPanelSize() ?? floor
+        let newSize = measuredPanelSize() ?? floor
         if usingFloor {
-            newSize.width  = max(newSize.width,  floor.width)
-            newSize.height = max(newSize.height, floor.height)
             DispatchQueue.main.async { [weak self] in self?.syncWindowFrame() }
         }
 
         expectedSize = newSize
 
         let frame = p.frame
-        guard abs(newSize.width - frame.width) > 0.5 || abs(newSize.height - frame.height) > 0.5
+        let isDragging = (p as? OverlayPanel)?.isDragging ?? false
+        let center = (isDragging ? nil : anchor) ?? NSPoint(x: frame.midX, y: frame.midY)
+        let target = TranscriptionOverlay.frame(centeredOn: center, size: newSize)
+        guard abs(target.width - frame.width) > 0.5 || abs(target.height - frame.height) > 0.5
+           || abs(target.minX - frame.minX) > 0.5 || abs(target.minY - frame.minY) > 0.5
         else { return }
+        p.setFrame(target, display: false)
+        p.contentView?.layoutSubtreeIfNeeded()
+        p.displayIfNeeded()
+    }
 
-        let center = NSPoint(x: frame.midX, y: frame.midY)
-        p.setFrame(NSRect(x: center.x - (newSize.width / 2),
-                          y: center.y - (newSize.height / 2),
-                          width: newSize.width,
-                          height: newSize.height),
-                   display: true)
+    static func frame(centeredOn center: NSPoint, size: NSSize) -> NSRect {
+        NSRect(x: (center.x - size.width / 2).rounded(),
+               y: (center.y - size.height / 2).rounded(),
+               width: size.width, height: size.height)
+    }
+
+    fileprivate(set) var anchor: NSPoint?
+
+    fileprivate func setAnchor(origin: NSPoint, size: NSSize) {
+        anchor = NSPoint(x: origin.x + size.width / 2, y: origin.y + size.height / 2)
     }
 
     func reassertFrameIfNeeded() {
@@ -289,14 +301,21 @@ class TranscriptionOverlay {
         self.windowDelegate = OverlayWindowDelegate(overlay: self)
         p.delegate = self.windowDelegate
 
-        positionPanel(p)
-        p.orderFront(nil)
+        screenObserver = NotificationCenter.default.addObserver(
+            forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            guard let self = self, let p = self.panel else { return }
+            self.setAnchor(origin: p.frame.origin, size: p.frame.size)
+        }
 
         self.panel = p
         syncWindowFrame()
+        positionPanel(p)
+        p.orderFront(nil)
     }
 
     private var hasBeenPositioned = false
+    private var screenObserver: NSObjectProtocol?
     private var windowDelegate: OverlayWindowDelegate?
 
     private func bottomCenterOrigin(for p: NSPanel) -> NSPoint {
@@ -313,17 +332,22 @@ class TranscriptionOverlay {
         hasBeenPositioned = true
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let p = self.panel else { return }
-            NSAnimationContext.runAnimationGroup { ctx in
+            self.syncWindowFrame()
+            let home = self.bottomCenterOrigin(for: p)
+            self.setAnchor(origin: home, size: p.frame.size)
+            NSAnimationContext.runAnimationGroup({ ctx in
                 ctx.duration = 0.5
                 ctx.timingFunction = CAMediaTimingFunction(name: .easeOut)
-                p.animator().setFrameOrigin(self.bottomCenterOrigin(for: p))
-            }
+                p.animator().setFrameOrigin(home)
+            }, completionHandler: { [weak self] in self?.syncWindowFrame() })
         }
     }
 
     private func positionPanel(_ p: NSPanel) {
         guard !hasBeenPositioned else { return }
-        p.setFrameOrigin(bottomCenterOrigin(for: p))
+        let home = bottomCenterOrigin(for: p)
+        p.setFrameOrigin(home)
+        setAnchor(origin: home, size: p.frame.size)
         hasBeenPositioned = true
     }
 
@@ -368,6 +392,8 @@ class OverlayWindowDelegate: NSObject, NSWindowDelegate {
         else if abs(pillMaxX - screenRect.maxX) < snapThreshold { edge = .right }
         else { edge = .none }
 
+        overlay.setAnchor(origin: frame.origin, size: frame.size)
+
         overlay.updateOrientation(isVertical: edge != .none)
 
         DispatchQueue.main.async { [weak self] in
@@ -395,12 +421,13 @@ class OverlayWindowDelegate: NSObject, NSWindowDelegate {
         origin.x = max(minSafeX, min(origin.x, maxSafeX))
         origin.y = max(minSafeY, min(origin.y, maxSafeY))
 
+        overlay?.setAnchor(origin: origin, size: size)
         guard !NSEqualPoints(origin, window.frame.origin) else { return }
-        NSAnimationContext.runAnimationGroup { ctx in
+        NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = 0.4
             ctx.timingFunction = CAMediaTimingFunction(name: .easeOut)
             window.animator().setFrameOrigin(origin)
-        }
+        }, completionHandler: { [weak self] in self?.overlay?.syncWindowFrame() })
     }
 
     func windowDidResize(_ notification: Notification) {
@@ -624,7 +651,7 @@ struct OverlayView: View {
                     )
                     .shadow(color: .black.opacity(isIdle ? 0.15 : 0),
                             radius: isIdle ? 8 : 0, x: 0, y: isIdle ? 2 : 0)
-                    .opacity(pillOpacity)
+                    .animation(.easeInOut(duration: 0.25)) { $0.opacity(pillOpacity) }
             )
             .fixedSize()
             .padding(Halo.inset)
@@ -635,7 +662,6 @@ struct OverlayView: View {
                         .onChange(of: geo.size) { model.onPanelInvalidated?() }
                 }
             )
-            .animation(.easeInOut(duration: 0.25), value: pillOpacity)
             .onReceive(ticker) { now = $0 }
     }
 

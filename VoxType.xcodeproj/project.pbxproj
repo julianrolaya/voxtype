@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BE25CAE1E72B66A91DD4369 /* AudioInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004119C752EFC55F6E844485 /* AudioInput.swift */; };
 		0FD0EFA06E579F53CCDC10D2 /* TextPostProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013F0CD7729A7310511CA6D3 /* TextPostProcessor.swift */; };
 		2314EDCCEACFF3513FBA0FA4 /* VoxTypeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E72725DBD71D8D23E7DEB8 /* VoxTypeApp.swift */; };
 		3916BD0A8A0BCA1E50E50503 /* HallucinationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CDA29721620241E7D32EAA /* HallucinationFilter.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		004119C752EFC55F6E844485 /* AudioInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioInput.swift; sourceTree = "<group>"; };
 		013F0CD7729A7310511CA6D3 /* TextPostProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPostProcessor.swift; sourceTree = "<group>"; };
 		0164F83FF61E517C854D3412 /* OpenAIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIClient.swift; sourceTree = "<group>"; };
 		10C1F73F50F6814E20419DA4 /* VoxType.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoxType.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +126,7 @@
 		8314CF9C89070B308EDF9231 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				004119C752EFC55F6E844485 /* AudioInput.swift */,
 				52E8DB91EBB124C4BC076307 /* AudioRecorder.swift */,
 			);
 			path = Audio;
@@ -245,6 +248,7 @@
 			files = (
 				94BB4AA7D8D4C8A57F29F64D /* AppDelegate.swift in Sources */,
 				8F5B0806EF16A831C933FBE6 /* AppSettings.swift in Sources */,
+				0BE25CAE1E72B66A91DD4369 /* AudioInput.swift in Sources */,
 				A983A60394A13E8C5662F058 /* AudioRecorder.swift in Sources */,
 				411761E259833D3E62DE39C4 /* GlobalHotKeyManager.swift in Sources */,
 				3916BD0A8A0BCA1E50E50503 /* HallucinationFilter.swift in Sources */,

@@ -175,6 +175,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         PerfLog.shared.set("model", settings.selectedModel.rawValue)
         PerfLog.shared.set("model_load_ms", whisperManager.lastModelLoadMs)
 
+        let levels = AudioLevels.measure(audioData)
+        let inputKind = AudioInput.defaultKind()
+        PerfLog.shared.set("audio_peak_dbfs", (levels.peakDBFS * 10).rounded() / 10)
+        PerfLog.shared.set("audio_rms_dbfs", (levels.rmsDBFS * 10).rounded() / 10)
+        PerfLog.shared.set("input_kind", inputKind)
+        Log.audio.info("Capture level: peak \(levels.peakDBFS, format: .fixed(precision: 1)) dBFS, rms \(levels.rmsDBFS, format: .fixed(precision: 1)) dBFS, input \(inputKind, privacy: .public) (\(AudioInput.defaultName() ?? "unknown", privacy: .private))")
+
         guard !audioData.isEmpty else {
             Log.app.notice("No audio captured")
             overlay.setIdle()
@@ -185,6 +192,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         overlay.showTranscribing()
 
         transcriptionTask = Task {
+            let vadStart = CFAbsoluteTimeGetCurrent()
+            let speech = whisperManager.hasSpeech(audioData)
+            PerfLog.shared.set("vad_ms", (CFAbsoluteTimeGetCurrent() - vadStart) * 1000)
+            if let speech { PerfLog.shared.set("speech_detected", speech) }
+            if case .skip(let notice) = SpeechGate.decide(hasSpeech: speech, inputKind: inputKind) {
+                await MainActor.run {
+                    Log.app.notice("No speech detected; nothing transcribed or pasted (input \(inputKind, privacy: .public))")
+                    self.overlay.showNotice(notice)
+                    self.state = .idle
+                    PerfLog.shared.mark("t6")
+                    PerfLog.shared.end()
+                }
+                return
+            }
+
             let rawText = await whisperManager.transcribe(audioData: audioData)
 
             if Task.isCancelled || self.isCancelling {
@@ -207,11 +229,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         PerfLog.shared.mark("t4")
                         text = await TextPostProcessor.processWithLLM(
                             text,
+                            language: self.whisperManager.lastLanguage,
                             appName: appName,
                             clipboardContext: clipboardContext
                         )
                         PerfLog.shared.mark("t5")
                         PerfLog.shared.set("llm_provider", self.settings.llmProvider.rawValue)
+                        PerfLog.shared.set("llm_mode", self.settings.llmMode.rawValue)
+                        PerfLog.shared.set("llm_model", TextPostProcessor.effectiveModel(self.settings))
+                        PerfLog.shared.set("detected_lang", self.whisperManager.lastLanguage ?? "unknown")
                     }
 
                     let finalText = text

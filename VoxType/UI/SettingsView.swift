@@ -97,6 +97,12 @@ struct SettingsView: View {
                     } else {
                         SecureField("OpenAI API Key", text: $settings.openAIKey)
                         TextField("OpenAI Model", text: $settings.openAIModel)
+                        Label("Sends the transcribed text to OpenAI, along with the app "
+                              + "you're dictating into, up to 500 characters of your "
+                              + "clipboard, and your custom vocabulary if you've set one.",
+                              systemImage: "exclamationmark.triangle")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
                     }
 
                     Picker("Formatter Theme", selection: $settings.formatterTheme) {

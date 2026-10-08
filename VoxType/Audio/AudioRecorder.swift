@@ -21,6 +21,19 @@ class AudioRecorder {
         _ = audioEngine.inputNode
 
         audioEngine.prepare()
+
+        configObserver = NotificationCenter.default.addObserver(
+            forName: .AVAudioEngineConfigurationChange, object: audioEngine, queue: .main
+        ) { [weak self] _ in self?.handleConfigurationChange() }
+    }
+
+    private var configObserver: NSObjectProtocol?
+
+    private func handleConfigurationChange() {
+        Log.audio.notice("Audio input changed (now \(AudioInput.defaultKind(), privacy: .public)); rebuilding capture")
+        audioEngine.inputNode.removeTap(onBus: 0)
+        audioEngine.stop()
+        if isWarm || isCapturing { startEngineIfNeeded() }
     }
 
     func setWarm(_ on: Bool) {
@@ -59,6 +72,10 @@ class AudioRecorder {
 
         let inputNode = audioEngine.inputNode
         let inputFormat = inputNode.outputFormat(forBus: 0)
+        guard inputFormat.sampleRate > 0, inputFormat.channelCount > 0 else {
+            Log.audio.error("No usable audio input (format \(inputFormat, privacy: .public)); not recording")
+            return
+        }
 
         guard let targetFormat = AVAudioFormat(
             commonFormat: .pcmFormatFloat32,

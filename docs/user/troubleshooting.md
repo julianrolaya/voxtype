@@ -22,6 +22,8 @@ Start here: **running `./setup.sh` again is always safe.** It skips what is alre
 
 ## Using VoxType
 
+**"No speech detected", but I did speak** — VoxType listens to the input selected in **System Settings → Sound → Input**. Check that it is the microphone you're using and that its level moves when you talk. A common cause is speakers or headphones without a microphone plugged into the headphone jack: macOS may switch the input to that jack, which records nothing.
+
 **Nothing happens when I press ⌥ Space**
 1. Check that the VoxType icon is in the menu bar. If it isn't, open VoxType from Applications.
 2. Another app may already use ⌥ Space (some launchers and input-source switchers do). Quit it or change its shortcut.

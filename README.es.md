@@ -53,7 +53,7 @@ El instalador te guía en todo, paso a paso y numerado:
 2. Revisa Xcode y, si hace falta, te ayuda a terminar de configurarlo
 3. Instala la única herramienta de compilación que necesita (`cmake`, con [Homebrew](https://brew.sh)), preguntándote antes
 4. Compila el motor de voz
-5. Descarga un modelo de voz (tú eliges cuál) y verifica su checksum
+5. Descarga un modelo de voz (tú eliges cuál) y un pequeño detector de voz, y verifica sus checksums
 6. *Opcional:* configura [Ollama](https://ollama.com) para limpiar el texto con IA local
 7. Compila VoxType, lo instala en **Aplicaciones** y te abre la pantalla de permisos
 
@@ -97,6 +97,7 @@ Una pequeña píldora flota sobre tus demás ventanas para que siempre veas qué
 | Tu texto | El resultado, visible unos segundos mientras se pega. Haz clic para cerrarlo. |
 
 - **Cancela cuando quieras.** Haz clic en la **✕** del widget, o presiona ⌥ Espacio otra vez mientras transcribe. No se pega nada.
+- **¿No dijiste nada?** Si presionas el atajo y no hablas, el widget muestra *No speech detected* y no se pega nada.
 - **¿No estaba el cursor en un campo de texto?** Después de cada dictado aparece en el widget un pequeño botón de copiar durante un par de minutos, para que pongas el último resultado en el portapapeles y lo pegues tú.
 - **Las palabras dudosas se subrayan en ámbar.** El modelo de voz informa qué tan seguro estuvo de cada palabra, y las que menos le convencieron se marcan para que sepas dónde mirar. Solo aplica cuando la limpieza con IA está apagada, porque esa limpieza reescribe las palabras que el modelo puntuó.
 - **Ponlo donde quieras.** Arrástralo a cualquier lugar. Suéltalo cerca del borde izquierdo o derecho de la pantalla y se vuelve vertical para no estorbar. **Ícono de la barra de menús → Reset Widget Position** lo devuelve al centro inferior. Puedes cambiar su tamaño en Settings.

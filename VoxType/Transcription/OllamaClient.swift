@@ -8,6 +8,7 @@ struct OllamaClient {
         let prompt: String
         let system: String
         let stream: Bool
+        let think: Bool
         let options: Options?
 
         struct Options: Codable {
@@ -25,6 +26,7 @@ struct OllamaClient {
             prompt: text,
             system: systemPrompt,
             stream: false,
+            think: false,
             options: .init(temperature: 0.1)
         )
 
