@@ -6,6 +6,18 @@ To update an existing install, run `./setup.sh --update` from your VoxType folde
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-10-09
+
+AI cleanup no longer adds a title, a subject line or a "[Your name]" placeholder to what it pastes.
+
+### Fixed
+
+- **AI cleanup added things you didn't say.** In Assistant mode, replies could start with a title or a "Subject:" line and end with a "[Your name]" placeholder, and all of it was pasted into your message. Replies now contain only the message itself. In Formatter mode, words you say in another language (for example "deploy" or "PR" in Spanish) are kept as you said them more often.
+
+### Known limitations
+
+- With the default `llama3.2` model, asking the Assistant in Spanish for code *and* an explanation may return only the code, and a few English words such as "team" may still be translated in Spanish dictation. A larger model such as `gemma4` handles both, but it needs considerably more memory and answers more slowly. Type the model name in Settings → Post-Processing if your Mac has memory to spare.
+
 ## [0.2.1] — 2026-10-08
 
 Choosing another speech model in Settings now works without restarting VoxType.

@@ -32,8 +32,9 @@ struct TextPostProcessor {
         if !vocab.isEmpty {
             system += "\nUser vocabulary (always keep this exact spelling for these names): \(vocab)"
         }
+        let rule = fidelityRule(mode: mode, language: language, appName: appName)
         let directive = languageDirective(mode: mode, language: language)
-        system += "\n\n\(directive)"
+        system += "\n\n\(rule)\n\n\(directive)"
 
         let wrapped: String
         if mode == .formatter {
@@ -52,18 +53,30 @@ struct TextPostProcessor {
             </dictated_text>
             """
         }
-        return (system, "\(wrapped)\n\n\(directive)")
+        return (system, "\(wrapped)\n\n\(rule)\n\n\(directive)")
+    }
+
+    static func fidelityRule(mode: AppSettings.LLMMode, language: String?, appName: String?) -> String {
+        switch mode {
+        case .formatter:
+            return "Fidelity: keep every word of the dictation, in the same order. Never replace a word with another one, and never expand an abbreviation or acronym (e.g. 'app' stays 'app'). Only add punctuation, capital letters and missing accents."
+        case .assistant:
+            let target = appName.map { "the app '\($0)'" } ?? "the active app"
+            return "Output: only the text to paste into \(target), with everything the request asks for: if it asks for code and an explanation, give both, the code in a code block and the explanation as plain text after it. Start directly with the content: no title, heading, subject line or label (such as 'Reply:' or 'Subject:'). Never invent names or fill-in fields: no placeholder in brackets such as [Your name] or [Team], and no signature; end with the last sentence of the message. Keep names, acronyms and technical terms from the request as written."
+        }
     }
 
     private static let languageNames = ["en": "English", "es": "Spanish"]
+    private static let otherLanguage = ["en": "Spanish", "es": "English"]
 
     static func languageDirective(mode: AppSettings.LLMMode, language: String?) -> String {
         let name = language.flatMap { languageNames[$0] }
         switch (mode, name) {
         case (.formatter, let name?):
-            return "Language: the dictated text is in \(name). Output it in \(name). Never translate it."
+            let other = language.flatMap { otherLanguage[$0] } ?? "another language"
+            return "Language: the dictated text is in \(name). Keep it in \(name), and keep every word the speaker said in another language (such as \(other)) exactly as dictated. Never translate any of it."
         case (.formatter, nil):
-            return "Language: keep the language of the dictated text. Never translate it."
+            return "Language: keep the language of the dictated text, and keep every word the speaker said in another language exactly as dictated. Never translate any of it."
         case (.assistant, let name?):
             return "Language: the request is in \(name). Reply in \(name) unless the request explicitly asks for a different language."
         case (.assistant, nil):

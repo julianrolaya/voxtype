@@ -3,7 +3,7 @@ import Combine
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var menuBarManager: MenuBarManager!
-    private let audioRecorder = AudioRecorder()
+    private var audioRecorder: AudioRecorder!
     private let whisperManager = WhisperManager()
     private let textInserter = TextInsertionManager()
     private let hotKeyManager = GlobalHotKeyManager()
@@ -42,6 +42,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil { return }
+
+        audioRecorder = AudioRecorder()
 
         menuBarManager = MenuBarManager(onQuit: { [weak self] in
             self?.quit()
